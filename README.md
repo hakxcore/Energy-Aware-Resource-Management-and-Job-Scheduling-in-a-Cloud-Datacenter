@@ -39,6 +39,9 @@ different categories. These are:
 2. Immediate jobs (IM): When a client submits a request, based on the resource availability, either the required resources are provisioned immediately, or the request is rejected. 
 3. Best effort jobs (BE): These jobs are kept in a queue and resources are provided only when it is available without affecting the execution of the other two types of jobs. It can be batch jobs also.
 
+
+
+
 ## References
 ##### [1]
 Q. Zhang, L. Cheng, and R. Boutaba, “Cloud Computing: State-Of-The-Art and Research Challenges”, Journal of internet services and applications, Vol.1, No.1, pp.7-18, 2010
