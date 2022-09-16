@@ -52,6 +52,13 @@ The Hosts have been classified into three states to regulate energy consumption 
 3. Standby State: This state consumes about 10% of the energy of the running state.
 
 
+# Results
+1. **Number of Hosts** : 50
+2. **Number of VMs** : 100(30 small,30 medium,20 large, 20 X-Large)
+3. **Number of Requests** : 100-1000
+4. **Energy at Active State** : 315(Watts)
+5. **Idle State** : 259(Watts)
+6. **Stand By State** : 18(Watts)
 
 
 
