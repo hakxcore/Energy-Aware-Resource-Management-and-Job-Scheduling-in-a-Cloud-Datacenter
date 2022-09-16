@@ -6,7 +6,6 @@ Job Scheduler and process simulator in a virtual data center to balance load and
 * Tejas Bhutada (bhutadats@rknec.edu)
 * Mukesh Kumar (kumarm_1@rknec.edu)
 
----
 
 ## Abstract
 In this project we modelled a cloud based datacenter with multiple hosts and VMs running on them with power aware configurations using Cloudsim library in Java. The Aim of this project is to optmise power aware datacenters by varying decisions of VM allocations, segregating cloudlets into categories for scheduling purpose and efficient resource usage while promoting energy awareness throughout the simulating environment. This project is an implementation of a research paper [Energy Aware Resource Management and Job Scheduling in a Cloud Datacenter](https://www.researchgate.net/publication/319403592_Energy_Aware_Resource_Management_and_Job_Scheduling_in_Cloud_Datacenter)
