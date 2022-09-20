@@ -30,13 +30,31 @@ Over the last few years, energy efficient resource management has extensively be
 Over the last few years, energy efficient resource management has extensively been studied. Many of these studies have employed VM consolidation for 
 energy conservation. The authors in [6] applied limited look ahead control in order to maximize the datacenter profit via energy consumption minimization in work based on VM consolidation. The controller decides the number of physical and virtual machines to be allocated for each request. However, they have not considered how preemption can affect energy consumption where requests have preemptive priority. Authors in [7] consolidate servers using modified best-fit decreasing (MBFD) algorithm in their scheduling. They sort the hosts based on the host utilization and migrate the VM with double threshold method. Authors in [8](##### [8]) argues that VM migration may help to achieve successfully various resource management needs such as load balancing, power management, fault tolerance, and system maintenance. But the migration itself involves practical difficulties such as transfer delay, performance degradation etc which gives rise to lot of overhead and cost. Authors in [9] considered dynamic voltage and frequency scaling (DVFS) and deadline constraint of a job for scheduling. Optimal performance–power ratio of each host is calculated and deadline constraint jobs are given to those VM of a host. Finally consolidation is used for reduce energy where migration is used. This method is not very well suitable for a datacenter which consists of heterogeneous systems.As part of scheduling algorithms, Selvarani [10] proposed an improved cost-based scheduling algorithm for making efficient mapping of jobs to the available resources by grouping them based on capacity in cloud. Jiayin Li [11] proposed a feedback pre-emptible task scheduling algorithm to generate scheduling with the shortest average execution time of jobs. In [12], Yang presented V-heuristics such as V-MCT for job allocation,which allocates every job in an arbitrary order of minimum completion time of the virtualized resource. In this, the completion time of the executing jobs is considered, but not the assigned jobs in the queue. Antony Thomas [13] presented a credit job scheduling in cloud computing by using user priority and task length.
 
+# Objective
+The objective of the scheduler is to minimizethe number of servers to save energy. To this end, we propose Energy Aware VM Available Time(EAVMAT) scheduling algorithm. When an AR or IM request comes, CMS will first check the resource availability in one of the active hosts from the list it holds and allocates the request to the hosts. 
+If no free availability exists then checks for the earliest available host and assigns to it. If none of the possibility exists then pre-empts the request to
+allocate in the existing host itself without switching on the new host. If more workload comes and existing active hosts are not enough then the off state hosts are bring into on state. Since AR/IM jobs can preempt BE request the only scenario where an AR/IM job is rejected is when resources are reserved by other AR jobs at the required time and not enough resources left for the current job in any active host and idle hosts.
+
 # Implementation
 We have attempted to minimize the energy consumption by allocating jobs to the VMs of existing active host thereby making unused idle host to get turned off. The challenge here is to be able to identify the servers as idle or near idle so that these can become suitable candidates for turning off. A key consideration that needs to be addressed is how to assign an appropriate job to a suitable VM. 
+
+We present an evaluation for our algorithm in terms of energy benefits and performance. In order to evaluate our algorithm in a large scale set up and calculate energy efficiency thereof, we expanded the CloudSim toolkit to simulate Cloud architecture and perform our experiments.
+
 To this end, we need to understand the type of the request being handled. Based on the user’s need, a job request may be a time (deadline) sensitive or not. Hence we have made use of this time dependency as a key to classify the job request [5] in to three 
 different categories. These are:
 1. Advance Reservation jobs (AR): Resources are reserved in advance. They must be made available at the specified time. 
 2. Immediate jobs (IM): When a client submits a request, based on the resource availability, either the required resources are provisioned immediately, or the request is rejected. 
 3. Best effort jobs (BE): These jobs are kept in a queue and resources are provided only when it is available without affecting the execution of the other two types of jobs. It can be batch jobs also.
+
+The Hosts have been classified into three states to regulate energy consumption on each individual host based on their usage and engagement. These are:
+1. Active(running) State: TheActive energy state is a high energy state in which the hosts process users' requests and consume a lot of energy.
+2. Idle State: It is a state in between the working state and the standby state consuming power for about 70% of the Active State.
+3. Standby State: This state consumes about 10% of the energy of the running state.
+
+
+
+
+
 
 
 
