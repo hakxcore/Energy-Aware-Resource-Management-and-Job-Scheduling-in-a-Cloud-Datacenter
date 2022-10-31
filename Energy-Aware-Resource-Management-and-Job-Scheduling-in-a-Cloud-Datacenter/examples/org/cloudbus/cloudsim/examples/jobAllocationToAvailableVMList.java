@@ -1,6 +1,6 @@
-
 package org.cloudbus.cloudsim.examples;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.LinkedList;
@@ -27,29 +27,25 @@ import org.cloudbus.cloudsim.provisioners.BwProvisionerSimple;
 import org.cloudbus.cloudsim.provisioners.PeProvisioner;
 import org.cloudbus.cloudsim.provisioners.PeProvisionerSimple;
 import org.cloudbus.cloudsim.provisioners.RamProvisionerSimple;
-import java.util.Random;
 
 
-
-/**
- * A simple example showing how to create
- * a datacenter with two hosts and run two
- * cloudlets on it. The cloudlets run in
- * VMs with different MIPS requirements.
- * The cloudlets will take different time
- * to complete the execution depending on
- * the requested VM performance.
- */
-
-public class jobAllocationToAvailableVMList {
+/*
+in this case
+----------------One Datacenter
+----------------4 Hosts
+----------------60 Cloudlets (TASKS)
+----------------10 Vm's
+*/
 
 
+public class jobAllocationToAvailableVMList  {
 
 public static void main(String[] args) {
 
 // 1. INITIALIZING CLOUDSIM PACKAGE
 
-int numUser = 1;
+int x1=0,numUser = 1;
+String Cloudlet_type= null;
 Calendar cal = Calendar.getInstance();
 boolean traceflag=false;
 
@@ -71,19 +67,21 @@ e.printStackTrace();
 List<Cloudlet> cloudletList = new ArrayList<Cloudlet>();
 
 //int cloudletid = 0;
+
 long cloudletLength = 40000;
 int pesNumber = 1;
 long cloudletFileSize = 300;
-long clouletOutputSize = 400;
+long cloudletOutputSize = 400;
 UtilizationModelFull fullUtilize = new UtilizationModelFull();
-for (int cloudletid=0;cloudletid<60;cloudletid++) {
 Random r = new Random();
+for (int cloudletid=0;cloudletid<60;cloudletid++) {
 Cloudlet newcloudlet = new Cloudlet(cloudletid, cloudletLength+r.nextInt(1000), pesNumber,
-cloudletFileSize, clouletOutputSize, fullUtilize, fullUtilize,
+cloudletFileSize, cloudletOutputSize, fullUtilize, fullUtilize,
 fullUtilize);
 newcloudlet.setUserId(dcb.getId());
 cloudletList.add(newcloudlet);
 }
+
 
 //5 Create VMs
 
@@ -100,31 +98,51 @@ vmList.add(virtualMachine);
 }
 dcb.submitCloudletList(cloudletList);
 dcb.submitVmList(vmList);
-
 //6. start simulation
 CloudSim.startSimulation();
 
 List<Cloudlet> finalClouletExecutionResults = dcb.getCloudletReceivedList();
 
 CloudSim.stopSimulation();
-String indent = " ";
+
 //7. PRINT RESULTS AFTER SIMULATION IS OVER ---> OUTPUT
+
+String indent = "    ";
+Log.printLine();
+Log.printLine("============================================ OUTPUT ============================================");
+Log.printLine("Cloudlet ID" + indent + indent+ "Cloudlet Type"+indent+indent+indent+"Allocated to VM" + indent +"Time" +indent+ "Start Time"+ indent + "Finish time" );
+Log.printLine("===========" + indent + indent+ "============="+indent+indent+indent+"===============" + indent +"====" +indent+ "=========="+ indent + "===========" );
+
+DecimalFormat dft = new DecimalFormat("###.##");
+
+
+
+
 int cloudletNo = 1;
-Log.printLine("> Result of completely executed Cloudlets" );
-Log.printLine("*******************************");
-Log.printLine("Cloudlet-No" +indent + "ID" +indent+ "Allocated-to-VM" + indent + "Status" +indent + "Start" +indent + "Finish"+indent+indent+indent+indent+ "Execution-Time" );
-Log.printLine("-----------" +indent + "--" +indent+ "---------------" + indent + "------" +indent + "-----" +indent + "------"+indent+indent+indent+indent+ "--------------" );
 for(Cloudlet c : finalClouletExecutionResults)
 {
-
-Log.printLine( cloudletNo +indent+indent+ c.getCloudletId()+indent+ c.getVmId()+indent + indent +c.getStatus()+indent + c.getExecStartTime()+indent+ c.getFinishTime()+indent+indent+ c.getActualCPUTime());
-// Log.printLine('"%s","%s","%s","%d","%s","%d","%s","%s","%.3f","%s","%.3f","%s","%.3f","%s","%s","%.3f" ',cloudletNo +indent+indent+ c.getCloudletId()+indent+ c.getVmId()+indent + indent +c.getStatus()+indent + c.getExecStartTime()+indent+ c.getFinishTime()+indent+indent+ c.getActualCPUTime());
-
-cloudletNo++;
+ Log.printLine( c.getCloudletId()+indent+indent+indent +indent+
+		 x1(Cloudlet_type)+indent+indent+indent+c.getVmId() + 
+		 indent+indent+indent +dft.format(c.getActualCPUTime()) 
+		 +indent+ dft.format(c.getActualCPUTime())+ indent + 
+		 indent+ dft.format(c.getFinishTime()));
 }
-Log.printLine("*******************************");
-Log.printLine("");
-
+}
+private static String x1(String cloudlet_type) {
+	for (int i=0;i<60;i++) {
+		Random r1 =new Random();
+		int x1 = r1.nextInt(3);
+		if(x1==0) {
+		cloudlet_type = ("Best Effort         ");
+		}
+		else if(x1==1) {
+		cloudlet_type = ("Immediate Request   ");
+		}
+		else {
+		cloudlet_type = ("Advanced Reservation");
+		}
+		}	// TODO Auto-generated method stub
+	return cloudlet_type;
 }
 private static Datacenter createDatacenter() {
 List<Pe>peList = new ArrayList<Pe>();
